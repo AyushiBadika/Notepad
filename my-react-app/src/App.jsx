@@ -4,20 +4,25 @@ import Note from "./components/Note";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 
 export default function App() {
-  const [notes, setNotes] = useState([
-    { title: "#Enter Title Here", content: "#Enter Title Here" },
-  ]);
+  const [notes, setNotes] = useState(
+    JSON.parse(localStorage.getItem("notes")).length === 0
+      ? [{ title: "#Enter Title Here", content: "#Enter Title Here" }]
+      : [...JSON.parse(localStorage.getItem("notes"))]
+  );
 
   const [currentNote, setCurrentNote] = useState(0);
   const [value, setValue] = useState(notes[0].content);
 
-  useEffect(() => {
-    setNotes(JSON.parse(localStorage.getItem("notes")));
-  }, []);
+  // useEffect(() => {
+  //   setNotes(JSON.parse(localStorage.getItem("notes")));
+  // }, []);
 
   useEffect(() => {
+    notes[currentNote].title =
+      notes[currentNote].content == ""
+        ? "#Enter Text Here"
+        : value.slice(0, 10) + "...";
     if (notes.length > 1) localStorage.setItem("notes", JSON.stringify(notes));
-    notes[currentNote].title = value.slice(0, 10) + "....";
   }, [notes, value]);
 
   useEffect(() => {
